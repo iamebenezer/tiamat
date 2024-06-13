@@ -309,26 +309,36 @@
                    </span></div>
         </div> -->
     </div>
-    <audio id="background-music" autoplay loop>
-        <source src="/music.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    
-    <script>
-        // Ensure autoplay works after page load
-        window.addEventListener('load', function() {
-            var audio = document.getElementById('background-music');
-            audio.play().catch(function(error) {
+   
+<audio id="background-music" loop>
+    <source src="/music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var audio = document.getElementById('background-music');
+
+        // Try to play the audio immediately
+        var playPromise = audio.play();
+
+        if (playPromise !== undefined) {
+            playPromise.catch(function(error) {
                 console.log("Autoplay was prevented. Adding click event listener to enable audio.");
-                // Optional: Ensure autoplay works after user interaction if blocked
+                // If autoplay is blocked, add a click event listener
                 document.addEventListener('click', function() {
                     if (audio.paused) {
-                        audio.play();
+                        audio.play().then(function() {
+                            console.log("Audio started after user interaction.");
+                        }).catch(function(error) {
+                            console.log("Failed to start audio after user interaction: ", error);
+                        });
                     }
                 }, { once: true }); // Use { once: true } to remove the event listener after first click
             });
-        });
-    </script>
+        }
+    });
+</script>
     <script src="./index_files/webpack-00d6d54b95c1b09f.js" crossorigin="" async=""></script>
     <script>
         (self.__next_f = self.__next_f || []).push([0]);
