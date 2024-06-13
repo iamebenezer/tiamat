@@ -314,18 +314,18 @@
         Your browser does not support the audio element.
     </audio>
     
-
     <script>
         // Ensure autoplay works after page load
         window.addEventListener('load', function() {
             var audio = document.getElementById('background-music');
             audio.play().catch(function(error) {
+                console.log("Autoplay was prevented. Adding click event listener to enable audio.");
                 // Optional: Ensure autoplay works after user interaction if blocked
                 document.addEventListener('click', function() {
                     if (audio.paused) {
                         audio.play();
                     }
-                });
+                }, { once: true }); // Use { once: true } to remove the event listener after first click
             });
         });
     </script>
